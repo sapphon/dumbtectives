@@ -1,19 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
-using OpenCover.Framework.Model;
 using UnityEngine;
 
-public class TheCrime : MonoBehaviour
+public abstract class AbstractTrigger : MonoBehaviour
 {
     public Requirement[] requirements;
-    public bool isDid = false;
+
+    protected abstract void doEffects();
+    private bool playerFulfillsRequirements(GameObject playerObject)
+    {
+        foreach (Requirement requirement in requirements)
+        {
+            if (!requirement.isMetBy(playerObject))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     void OnCollisionEnter(Collision bonk)
     {
         if (bonk.collider.CompareTag("Player"))
         {
             if (playerFulfillsRequirements(bonk.collider.gameObject))
             {
-                doTheCrime();
+                doEffects();
             }
             else
             {
@@ -29,18 +41,8 @@ public class TheCrime : MonoBehaviour
         {
             requirementsString += req.ToString() + "\r\n";
         }
+
         Debug.Log(requirementsString);
-    }
-
-    private void doTheCrime()
-    {
-        Debug.Log("You did the dirty deed! Time to leave.");
-        this.isDid = true;
-    }
-
-    private bool playerFulfillsRequirements(GameObject playerObject)
-    {
-        throw new System.NotImplementedException();
     }
 }
 
@@ -56,5 +58,10 @@ public class Requirement
     public override string ToString()
     {
         return this.requirementName;
+    }
+
+    public bool isMetBy(GameObject playerObject)
+    {
+        throw new System.NotImplementedException();
     }
 }
