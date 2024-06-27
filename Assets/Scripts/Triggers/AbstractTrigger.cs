@@ -19,11 +19,11 @@ public abstract class AbstractTrigger : MonoBehaviour
         return true;
     }
     
-    void OnCollisionEnter(Collision bonk)
+    void OnTriggerEnter(Collider bonker)
     {
-        if (bonk.collider.CompareTag("Player"))
+        if (bonker.CompareTag("Player"))
         {
-            if (playerFulfillsRequirements(bonk.collider.gameObject))
+            if (playerFulfillsRequirements(bonker.gameObject))
             {
                 doEffects();
             }
